@@ -2,6 +2,7 @@
  *  Made for college assignments/personal projects.
  *  Do not use without permission
  */
+
 package echa.matrixinverse;
 
 
