@@ -3,20 +3,20 @@
  *  Do not use without permission
  */
 
-package echa.matrixinverse;
+package echa.matrixoperations;
 
 
 /**
  *
  * @author echa
  */
-public class MatrixInverse {
+public class Inverse {
 
     private double [][] matrix;
     private int order;
     private int row;
     
-    public MatrixInverse(double[][] matrix,int row){
+    public Inverse(double[][] matrix,int row){
         setMatrix(matrix, row);
     }
 
@@ -95,7 +95,7 @@ public class MatrixInverse {
         double[][] adjointMatrix=new double[order][order];
         for(int i=0;i<order;i++){
             for(int j=0;j<order;j++){
-                adjointMatrix[i][j]=matrix[j][i];
+                adjointMatrix[i][j]=cofactor()[j][i];
             }
         }
         return adjointMatrix;
@@ -105,6 +105,7 @@ public class MatrixInverse {
         double[][] inverse=new double[order][order];
         double[][] adjoint=adjoint();
         double determinant=rowExpansion(row);
+        
         for(int i=0;i<order;i++){
             for(int j=0;j<order;j++){
                 inverse[i][j]=(1/determinant)*adjoint[i][j];
@@ -124,11 +125,21 @@ public class MatrixInverse {
             }
             outString+="|\n";
         }
+        outString+="\nDeterminant:";
+        outString+="\n"+rowExpansion(row)+"\n";
+        outString+="\nAdjoint\n";
+        for(int i=0;i<order;i++){
+            outString+="|";
+            for(int j=0;j<order;j++){
+                outString+=String.format("%.4f", adjoint()[i][j])+" ";
+            }
+            outString+="|\n";
+        }
         outString+="\ninverse\n";
         for(int i=0;i<order;i++){
             outString+="|";
             for(int j=0;j<order;j++){
-                outString+=String.format("%.4f", inverse[i][j])+" ";
+                outString+=String.format("%.3f", inverse[i][j])+" ";
             }
             outString+="|\n";
         }

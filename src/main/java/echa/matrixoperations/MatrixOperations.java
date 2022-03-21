@@ -3,25 +3,25 @@
  *  Do not use without permission
  */
 
-package echa.matrixinverse;
+package echa.matrixoperations;
 
 /**
  *
  * @author echa
  */
-public class MIMain {
+public class MatrixOperations {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         double[][] matrix = {
-            {1,29,12},
-            {6,1,34},
-            {21,4,2},
+            {-1,0,-1},
+            {1,1,0},
+            {-2,0,1},
             };
-        MatrixInverse mi=new MatrixInverse(matrix,0);
-        System.out.println(mi);
+        Inverse inverse=new Inverse(matrix,0);
+        System.out.println(inverse);
     }
 
 }
