@@ -5,8 +5,6 @@
 
 package echa.matrixoperations;
 
-import java.util.Arrays;
-
 /**
  *
  * @author echa
@@ -30,32 +28,53 @@ public class GaussJordan extends ElementaryRowOp{
     }
     
     public void Gauss(){
-        for(int index=0;index<matrixEnd.length;index++){
-            check(index, index);
-            if(matrixEnd[index][index]!=1){
-                double scale=1/matrixEnd[index][index];
-                multiply(index, scale);
+        System.out.println("Gauss");
+        for(int row=0;row<matrixEnd.length;row++){            
+            check(row, row);
+            double scale=1;
+            if(matrixEnd[row][row]!=1){
+                scale=1/matrixEnd[row][row];
+                multiply(row, scale);
             }
-            for(int i=index+1;i<matrixEnd.length;i++){
-                if(matrixEnd[i][index]!=0){
-                    double scale=-(matrixEnd[i][index]/matrixEnd[index][index]);
-                    add(i, index, scale);
+            System.out.println("Pivot row "+(row+1)+"\nScale:"+scale+"\n"
+                    +toString());          
+            if(row!=matrixEnd.length-1){
+                System.out.println("Zeroing column "+(row+1));
+            }
+            for(int i=row+1;i<matrixEnd.length;i++){
+                
+                double scale2=0;
+                if(matrixEnd[i][row]!=0){
+                    scale2=-(matrixEnd[i][row]/matrixEnd[row][row]);
+                    add(i, row, scale2);
                 }
+                System.out.println("Row "+(i+1)+"; Scale: "+scale2);
+                System.out.println(toString());              
             }
         }
     }
     
     public void GaussJordan(){
         Gauss();
-        for(int index=matrixEnd.length-1;index>=0;index--){
-            for(int i=index-1;i>=0;i--){
-                double scale=-(matrixEnd[i][index]/matrixEnd[index][index]);
-                add(i, index, scale);
+        System.out.println("Gauss-Jordan");
+        for(int row=matrixEnd.length-1;row>=0;row--){
+            for(int i=row-1;i>=0;i--){
+                double scale=-(matrixEnd[i][row]/matrixEnd[row][row]);
+                add(i, row, scale);
             }
         }
+        System.out.println(toString());
     }
     @Override
     public String toString(){
-        return Arrays.deepToString(matrixEnd);
+        String print="";
+        for (double[] matrixEnd1 : matrixEnd) {
+            print+="|";
+            for (int j = 0; j < matrixEnd1.length; j++) {
+                print += matrixEnd1[j] + " ";
+            }
+            print+="|"+"\n";
+        }
+        return print;
     }
 }

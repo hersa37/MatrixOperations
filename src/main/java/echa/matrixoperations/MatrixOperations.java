@@ -26,11 +26,9 @@ public class MatrixOperations {
 //        Inverse inverse=new Inverse(matrix,0);
 //        System.out.println(inverse);
         
-        System.out.println(Arrays.deepToString(matrix));
         GaussJordan gj=new GaussJordan(matrix);
+        System.out.println(gj.toString());
         gj.GaussJordan();
-        System.out.println(Arrays.deepToString(gj.getMatrixEnd()));
-        
         
     }
 
