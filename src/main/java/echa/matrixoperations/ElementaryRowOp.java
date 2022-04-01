@@ -12,36 +12,42 @@ package echa.matrixoperations;
  * Informatika - Universitas Sanata Dharma
  */
 public class ElementaryRowOp{
-    private double[][] matrix;
+    protected double[][] matrix;
+    protected double[][] matrixEnd;
        
     public double[][] getMatrix() {
         return matrix;
     }
+    
+    public double[][] getMatrixEnd(){
+        return matrixEnd;
+    }
 
     public void setMatrix(double[][] matrix) {
         this.matrix = matrix;
+        matrixEnd=matrix;
     }
     
-    public void swtich(int rowA, int rowB){
-        double[] tempRowA=matrix[rowB];
-        double[] tempRowB=matrix[rowA];
+    public void exchange(int rowA, int rowB){
+        double[] tempRowA=matrixEnd[rowB];
+        double[] tempRowB=matrixEnd[rowA];
         
-        matrix[rowA]=tempRowA;
-        matrix[rowB]=tempRowB;
+        matrixEnd[rowA]=tempRowA;
+        matrixEnd[rowB]=tempRowB;
     }
     
     public void multiply(int row, double scale){
-        double[] tempRow=matrix[row];
-        for(int i=0;i<matrix.length;i++){
-            matrix[row][i]=scale*tempRow[i];
+        double[] tempRow=matrixEnd[row];
+        for(int i=0;i<matrixEnd[row].length;i++){
+            matrixEnd[row][i]=scale*tempRow[i];
         }
     }
     
     public void add(int rowOp, int rowAdd, double scale){
-        double[] tempRowA=matrix[rowOp];
-        double[] tempRowB=matrix[rowAdd];
-        for(int i=0;i<matrix.length;i++){
-            matrix[rowOp][i]=tempRowA[i]+(scale*tempRowB[i]);
+        double[] tempRowA=matrixEnd[rowOp];
+        double[] tempRowB=matrixEnd[rowAdd];
+        for(int i=0;i<matrixEnd[rowOp].length;i++){
+            matrixEnd[rowOp][i]=tempRowA[i]+(scale*tempRowB[i]);
         }
     }
 }
