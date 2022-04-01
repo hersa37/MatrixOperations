@@ -8,8 +8,6 @@ package echa.matrixoperations;
 /**
  *
  * @author echa
- * Bernardus Hersa Galih Prakoso - 215314018
- * Informatika - Universitas Sanata Dharma
  */
 public class ElementaryRowOp{
     protected double[][] matrix;
