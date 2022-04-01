@@ -17,7 +17,9 @@ public class Inverse {
     private int row;
     
     public Inverse(double[][] matrix,int row){
-        setMatrix(matrix, row);
+        this.matrix = matrix;
+        order=order(matrix);
+        this.row=row;
     }
 
     public double[][] getMatrix() {
