@@ -3,9 +3,10 @@
  *  Do not use without permission
  */
 
-package echa.matrixoperations;
+package echa.matrix;
 
 import java.util.Arrays;
+import echa.matrix.Matrix.*;
 
 
 /**
@@ -19,16 +20,15 @@ public class MatrixOperations {
      */
     public static void main(String[] args) {
         double[][] matrix = {
-            {-1,4,-2,1},
-            {2,-1,3,7},
-            {1,-3,2,2}
+            {-1,0,-1},
+            {0,2,3},
+            {1,0,-1}
             };
-//        Inverse inverse=new Inverse(matrix,0);
-//        System.out.println(inverse);
+        System.out.println(Matrix.toString(Matrix.GaussJordan(matrix)));
         
-        GaussJordan gj=new GaussJordan(matrix);
-        System.out.println(gj.toString());
-        gj.GaussJordan();
+//        GaussJordan gj=new GaussJordan(matrix);
+//        System.out.println(gj.toString());
+//        gj.GaussJordan();
         
     }
 
