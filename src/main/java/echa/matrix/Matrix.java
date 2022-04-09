@@ -120,11 +120,10 @@ public class Matrix {
      * Calculates inverse of a matrix 
      * @param matrix the matrix used to find its inverse
      * @return the inverse
-     * @throws echa.matrix.UnsopportedMatrixException
      */
-    public static double[][] inverse(double[][] matrix) throws UnsopportedMatrixException{
+    public static double[][] inverse(double[][] matrix){
         if(!checkSquare(matrix)){
-            throw new UnsopportedMatrixException("Not square matrix");
+            return null;
         }
         if(matrix.length<=3){
             return inverseRowExp(matrix);
@@ -175,6 +174,7 @@ public class Matrix {
         }
         return matrixTemp;
     }
+    
     /**
      * Applies Gauss operation on a matrix
      * @param matrixBase the matrix used to do Gauss operation
@@ -243,12 +243,25 @@ public class Matrix {
         return vectorCombination;
     }
     
-    private static double[][] transpose(double[][] matrix){
+    /**
+     * Transposes a matrix
+     * @param matrix the matrix to be transposed
+     * @return transposed matrix
+     */
+    public static double[][] transpose(double[][] matrix){
         double[][] transpose=new double[matrix[0].length][matrix.length]; 
         for(int row=0;row<transpose.length;row++){
             for(int column=0;column<transpose[0].length;column++){
                 transpose[row][column]=matrix[column][row];
             }
+        }
+        return transpose;
+    }
+    
+    public static double[][] transpose(double[] matrix){
+        double[][] transpose=new double[matrix.length][1]; 
+        for(int row=0;row<transpose.length;row++){
+            transpose[row][0]=matrix[row];
         }
         return transpose;
     }
@@ -293,7 +306,7 @@ public class Matrix {
         double[][] transMatrix=transformationMatrix(oldBase, newBase);
         double[] transformed=new double[vector.length];
         for(int i=0; i<transformed.length;i++){
-            transformed[i]=dotProduct(transMatrix[i], vector);
+            transformed[i]=Matrix.dotProduct(transMatrix[i], vector);
         }
         return transformed;
     }
@@ -334,6 +347,97 @@ public class Matrix {
         return product;
     }
     
+    private static double[] scalarMultipication(double[] scale, double[] matrix){
+        double[] multiplied= new double[scale.length];
+        for(int i=0;i<scale.length;i++){
+            multiplied[i]=scale[i]*matrix[i];
+        }
+        return multiplied;
+    }
+    
+    /**
+     * Multiplies two matrices by means of dot product
+     * @param matrix1 the first matrix. Determines amount of rows
+     * @param matrix2 the second matrix. Determines amount of columns
+     * @return the product of the multiplication. If matrices don't match, return null
+     */
+    public static double[][] dotProduct(double[][] matrix1, double[][] matrix2){
+        
+        if(matrix1[0].length!=matrix2.length){
+            return null;
+        }
+                        
+        double[][] product=new double[matrix1.length][matrix2[0].length];
+        for(int i=0;i<product.length;i++){
+            for(int j=0;j<product[0].length;j++){
+                product[i][j]=0;
+                for(int k=0;k<matrix1[0].length;k++){
+                    product[i][j]+=matrix1[i][k]*matrix2[k][j];
+
+                }
+            }
+        }
+        return product;
+    }
+    
+    public static double innerProduct(double[] matrix1, double[] matrix2){
+        return dotProduct(matrix1, matrix2);
+    }
+    
+    public static double innerProduct(double[] scale, double[] matrix1, double[] matrix2){
+        return dotProduct(scalarMultipication(scale, matrix1), matrix2);
+    }
+    
+    public static boolean isOrthogonal(double[] matrix1, double[] matrix2){
+        return dotProduct(matrix1, matrix2)==0;
+    }   
+        
+    public static double norm(double[] matrix){
+        return Math.pow(Matrix.dotProduct(matrix, matrix),0.5);
+    }
+    
+    public static double norm(double[] scale, double[] matrix){
+        double[] scaledVector=scalarMultipication(scale, matrix);
+        return Math.pow(Matrix.dotProduct(scaledVector, scaledVector),0.5);
+    }
+    
+    public static double vectorDistance(double[] matrix1, double[] matrix2){
+        double[] subtract=new double[matrix1.length];
+        for(int i=0;i<subtract.length;i++){
+            subtract[i]=matrix1[i]-matrix2[i];
+        }
+        return norm(subtract);
+    }
+    
+    public static double vectorDistance(double[] scale,double[] matrix1, double[] matrix2){
+        double[] subtract=new double[matrix1.length];
+        for(int i=0;i<subtract.length;i++){
+            subtract[i]=(matrix1[i]-matrix2[i]);
+        }
+        return norm(scale, subtract);
+    }
+    
+    /**
+     * Finds the angle of two vectors in radians
+     * @param matrix1 the first vector
+     * @param matrix2 the second vector
+     * @return the angle of the two vectors
+     */
+    public static double vectorAngle(double[] matrix1, double[] matrix2){
+        return Math.acos(dotProduct(matrix1, matrix2)/(norm(matrix1)*norm(matrix2)));
+    }
+    
+    /**
+     * Finds the angle of two vectors in radians
+     * @param scale scale of the product
+     * @param matrix1 the first vector
+     * @param matrix2 the second vector
+     * @return the angle of the two vectors
+     */
+    public static double vectorAngle(double[] scale, double[] matrix1, double[] matrix2){
+        return Math.acos(dotProduct(matrix1, matrix2)/(norm(matrix1)*norm(matrix2)));
+    }
+    
     /**
      * Prints matrix in grid format
      * @param matrix the matrix to print
@@ -344,7 +448,7 @@ public class Matrix {
         for (double[] matrix1 : matrix) {
             print+="|";
             for (int j = 0; j < matrix1.length; j++) {
-                print += (matrix1[j]+0.0) + " ";
+                print += String.format("%6s",String.format("%.3f",matrix1[j]+0.0)) + " ";
             }
             print+="|"+"\n";
         }
@@ -354,7 +458,7 @@ public class Matrix {
     public static String toString(double[] matrix){
         String print="|";
             for (int j = 0; j < matrix.length; j++) {
-                print += (matrix[j]+0.0) + " ";
+                print += String.format("%6s",matrix[j]+0.0) + " ";
             }
             print+="|"+"\n";        
         return print;
