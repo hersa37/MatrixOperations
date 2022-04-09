@@ -28,12 +28,24 @@ public class MatrixOperations {
             {0,0,0,1},
             {0,3,4,2}
             };
-        double[] vector={1,1,1,1};
+        double[] vector={-1,0};
+        
+        double[][] m1={{1,0},{0,1}};
+        double[][] m2={{1,-1},{1,-2}};
+        
+        
+        System.out.println(Matrix.linearIndependence(m1));
+        System.out.println(Matrix.spans(m1));
+        System.out.println(Matrix.isBasis(m1));
+//        System.out.println(Matrix.toString(Matrix.transformationMatrix(m1, m2)));
+        System.out.println(Matrix.toString(Matrix.transformVector(vector, m1, m2)));
+//        System.out.println(Matrix.toString(Matrix.transformationMinor(m1[0], m2)));
+//        System.out.println(Matrix.toString(Matrix.transformationMinor(m1[1], m2)));
         
 //        System.out.println(Matrix.toString(Matrix.inverse(matrix)));
 //        System.out.println("");
         
-        System.out.println(Matrix.toString(Matrix.linearCombination(matrix, vector)));
+//        System.out.println(Matrix.toString(Matrix.linearCombination(matrix, vector)));
         
 //        GaussJordan gj=new GaussJordan(matrix);
 //        System.out.println(gj.toString());

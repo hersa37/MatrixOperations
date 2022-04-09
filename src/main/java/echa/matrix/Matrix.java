@@ -75,7 +75,7 @@ public class Matrix {
      */
     public static double determinant(double[][] matrixBase){
         double[][] matrix=copyArray(matrixBase);
-        if(order(matrix)<=3){
+        if(order(matrix)==3){
             return rowExpansion(0, matrix);
         }
         for(int row=0;row<matrix.length;row++){
@@ -260,7 +260,7 @@ public class Matrix {
         int productColumn=vectorCombination[0].length-1;
         
         for (double[] vectorCombination1 : vectorCombination) {
-            if (vectorCombination1[productColumn] == 0) {
+            if (vectorCombination1[productColumn] != 0) {
                 return false;
             }
         }
@@ -278,8 +278,60 @@ public class Matrix {
      * @param setOfVector the vectors checked to see if they're a basis
      * @return whether the set is a basis or not
      */
-    public static boolean ifBasis(double[][] setOfVector){
+    public static boolean isBasis(double[][] setOfVector){
         return spans(setOfVector) && linearIndependence(setOfVector);
+    }
+    
+    /**
+     * Transforms a vector into a vector of another base
+     * @param vector the vector to be transformed
+     * @param oldBase the base of the initial vector
+     * @param newBase the base of the transformed vector
+     * @return the transformed vector in the new base
+     */
+    public static double[] transformVector(double [] vector, double[][] oldBase,double[][] newBase){
+        double[][] transMatrix=transformationMatrix(oldBase, newBase);
+        double[] transformed=new double[vector.length];
+        for(int i=0; i<transformed.length;i++){
+            transformed[i]=dotProduct(transMatrix[i], vector);
+        }
+        return transformed;
+    }
+    
+    private static double[][] transformationMatrix(double[][] oldBase, double[][] newBase){
+        double[][] transformation=new double[oldBase.length][oldBase[0].length];
+        for(int row=0;row<transformation.length;row++){
+            double[] tempMatrix=transformationMinor(oldBase[row], newBase);
+            for(int column=0;column<transformation[0].length;column++){
+                
+                transformation[column][row]=tempMatrix[column];
+            }
+        }
+        return transformation;
+    }
+    
+    private static double[] transformationMinor(double[] baseVector, double[][] resultVector){
+        double[][] minor=new double[resultVector[0].length][resultVector.length+1];
+        for(int row=0;row<minor.length;row++){
+            for(int column=0;column<minor[0].length-1;column++){
+                minor[row][column]=resultVector[column][row];
+            }
+            minor[row][minor[0].length-1]=baseVector[row];
+        }
+        minor=GaussJordan(minor);
+        double[] scale=new double[minor.length];
+        for(int row=0;row<scale.length;row++){
+            scale[row]=minor[row][minor[0].length-1];
+        }
+        return scale;
+    }
+    
+    private static double dotProduct(double[] matrix, double[] scale){
+        double product=0;
+        for(int i=0;i<matrix.length;i++){
+            product+=matrix[i]*scale[i];
+        }
+        return product;
     }
     
     /**
@@ -296,6 +348,15 @@ public class Matrix {
             }
             print+="|"+"\n";
         }
+        return print;
+    }
+    
+    public static String toString(double[] matrix){
+        String print="|";
+            for (int j = 0; j < matrix.length; j++) {
+                print += (matrix[j]+0.0) + " ";
+            }
+            print+="|"+"\n";        
         return print;
     }
     
