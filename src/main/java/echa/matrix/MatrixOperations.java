@@ -25,12 +25,15 @@ public class MatrixOperations {
             {1,3,0,0},
             {0,1,0,0},
             {0,0,1,0},
-            {0,0,0,1}
+            {0,0,0,1},
+            {0,3,4,2}
             };
+        double[] vector={1,1,1,1};
         
+//        System.out.println(Matrix.toString(Matrix.inverse(matrix)));
+//        System.out.println("");
         
-        System.out.println(Matrix.toString(Matrix.inverse(matrix)));
-        System.out.println("");
+        System.out.println(Matrix.toString(Matrix.linearCombination(matrix, vector)));
         
 //        GaussJordan gj=new GaussJordan(matrix);
 //        System.out.println(gj.toString());

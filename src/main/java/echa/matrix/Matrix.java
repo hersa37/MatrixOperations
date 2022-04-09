@@ -72,9 +72,8 @@ public class Matrix {
      * Finds determinant of a matrix
      * @param matrixBase the matrix whose determinant is to be found
      * @return the determinant of matrix. Uses row expansion on the 1st row
-     * @throws echa.matrix.UnsopportedMatrixException
      */
-    public static double determinant(double[][] matrixBase) throws UnsopportedMatrixException{
+    public static double determinant(double[][] matrixBase){
         double[][] matrix=copyArray(matrixBase);
         if(order(matrix)<=3){
             return rowExpansion(0, matrix);
@@ -96,16 +95,12 @@ public class Matrix {
         return determinant;
     }
     
-    private static double rowExpansion(int row, double[][] matrix) throws UnsopportedMatrixException{
+    private static double rowExpansion(int row, double[][] matrix){
         double[][] cofactor=cofactor(matrix);
         double determinant=0;
         
-        try{
-            for(int i=0;i<matrix.length;i++){
-                determinant+=matrix[row][i]*cofactor[row][i];
-            }
-        } catch (Exception e){
-            throw new UnsopportedMatrixException("No inverse");
+        for(int i=0;i<matrix.length;i++){
+            determinant+=matrix[row][i]*cofactor[row][i];
         }
         return determinant;
     }
@@ -136,7 +131,7 @@ public class Matrix {
         }else return inverseElemOp(matrix);
     }
     
-    private static double[][] inverseRowExp(double[][] matrix) throws UnsopportedMatrixException{
+    private static double[][] inverseRowExp(double[][] matrix){
         double determinant=determinant(matrix);
         if(determinant==0){
             return matrix;
@@ -154,7 +149,7 @@ public class Matrix {
 
     }
     
-    private static double[][] inverseElemOp(double[][] matrix) throws UnsopportedMatrixException{
+    private static double[][] inverseElemOp(double[][] matrix){
         if(determinant(matrix)==0){
             return matrix;
         }
@@ -171,9 +166,7 @@ public class Matrix {
     private static double[][] compoundMatrix(double[][] matrix){
         double[][] matrixTemp=new double[matrix.length][2*matrix.length];
         for(int row=0;row<matrix.length;row++){
-            for(int column=0;column<matrix[0].length;column++){
-                matrixTemp[row][column]=matrix[row][column];
-            }
+            System.arraycopy(matrix[row], 0, matrixTemp[row], 0, matrix[0].length);
             for(int column=matrix.length;column<matrixTemp[0].length;column++){
                 if(column==row+matrix.length){
                     matrixTemp[row][column]=1;
@@ -225,6 +218,68 @@ public class Matrix {
     
     private static boolean checkSquare(double[][] matrix){
         return(matrix.length==matrix[0].length);
+    }
+    
+    /**
+     * Calculates whether a set of vectors can be linearly combined to produce a certain vector
+     * @param setOfVectors the vector that wants to be checked if they're a linear combination
+     * @param productVector the vector that is the supposed product of the list of vector
+     * @return the Gauss-Jordan operation that shows each scalar constant's value
+     */
+    
+    public static double[][] linearCombination(double[][] setOfVectors, double[] productVector){
+        double[][] vectorCombination=combineVector(setOfVectors, productVector);
+        return GaussJordan(vectorCombination);       
+    }
+    
+    private static double[][] combineVector(double[][] setOfVectors, double[] productVector){
+        double[][] vectorCombination=new double[setOfVectors[0].length][setOfVectors.length+1];
+        double[][] transpose=transpose(setOfVectors);
+        
+        for(int row=0;row<vectorCombination.length;row++){
+            System.arraycopy(transpose[row], 0, vectorCombination[row], 0, transpose[0].length);
+            vectorCombination[0][vectorCombination.length-1]=productVector[row];
+        }
+        return vectorCombination;
+    }
+    
+    private static double[][] transpose(double[][] matrix){
+        double[][] transpose=new double[matrix[0].length][matrix.length]; 
+        for(int row=0;row<transpose.length;row++){
+            for(int column=0;column<transpose[0].length;column++){
+                transpose[row][column]=matrix[column][row];
+            }
+        }
+        return transpose;
+    }
+    
+    private static boolean linearIndependence(double[][] setOfVectors){
+        double[] productVector=new double[setOfVectors.length];
+        double[][] vectorCombination=combineVector(setOfVectors, productVector);
+        vectorCombination=GaussJordan(vectorCombination);
+        int productColumn=vectorCombination[0].length-1;
+        
+        for (double[] vectorCombination1 : vectorCombination) {
+            if (vectorCombination1[productColumn] == 0) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private static boolean spans(double[][] setOfVector){
+        double[][] transpose=transpose(setOfVector);
+        return determinant(transpose) != 0;
+    }
+    
+    /**
+     * Checks if a set of vector is a basis of vectors
+     * @param setOfVector the vectors checked to see if they're a basis
+     * @return whether the set is a basis or not
+     */
+    public static boolean ifBasis(double[][] setOfVector){
+        return spans(setOfVector) && linearIndependence(setOfVector);
     }
     
     /**
