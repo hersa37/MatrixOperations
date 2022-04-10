@@ -13,6 +13,7 @@ What I plan on expanding:
 - ~~Calculate inverse of any matrix size with~~
 - ~~Do elementary row operations and gauss-jordan operations~~ 
 - ~~Vector space operations~~
+- Eigenvalue/eigenvector
 
 Changelog (I still don't know how to version stuff correctly)
 - 0.01 - Initial code
