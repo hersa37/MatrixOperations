@@ -4,7 +4,7 @@ Currently a work in progress. My own small project to make codes for various mat
 Current features:
 - Calculate inverse of any size (3x3 uses row expansion, 4x4 and up uses Gauss-Jordan)
 - Elementary row operations
-- Gauss/Gauss-Jordan operations ~~with steps~~ Removed because current implementation feels too bulky. I'll try to find a way to make it work with current code without making it bulky
+- Gauss/Gauss-Jordan operations ~~with steps~~ *Removed because current implementation feels too bulky. I'll try to find a way to make it work with current code without making it bulky*
 - Check vector basis
 - Transform a vector from one basis to another
 
